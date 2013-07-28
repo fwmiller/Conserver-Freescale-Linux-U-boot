@@ -1,0 +1,522 @@
+# constants (forced values)
+config CONFIG_TITLE
+    string
+    default PLATFORM_COMMENT
+
+config PLATFORM_COMMENT
+    string
+    default "Freescale iMX27 ADS Board" if PLATFORM = "imx27ads"
+    default "Freescale iMX31 ADS Board" if PLATFORM = "imx31ads"
+    default "Freescale iMX25 3-Stack Board" if PLATFORM = "imx25_3stack"
+    default "Freescale iMX233/stmp3780 Based Boards" if PLATFORM = "imx233"
+    default "Freescale iMX28 Based Boards" if PLATFORM= "imx28"
+    default "Freescale iMX31 3-Stack Board" if PLATFORM = "imx31_3stack"
+    default "Freescale iMX35 3-Stack Board" if PLATFORM = "imx35_3stack"
+    default "Freescale iMX37 3-Stack Board" if PLATFORM = "imx37_3stack"
+    default "Freescale iMX51 3-Stack Board" if PLATFORM = "imx51_3stack"
+    default "Freescale iMX5x Based Boards" if PLATFORM = "imx51"
+    default "Freescale iMX6x Based Boards" if ( PLATFORM = "imx6q" || PLATFORM = "imx6s" )
+    default "Freescale iMX reference boards"
+
+config VENDOR
+    string
+    default "Freescale"
+
+config PLATFORM
+    string Platform
+    default imx
+    help
+        Indicates the platform selected from preconfigs.  Please don't change
+        in this session
+
+config PLATFORM_SUBDIR
+    string
+    default imx
+
+config GNUTARCH
+    string
+    default arm
+
+config LINTARCH
+    string
+    default arm
+
+config CFGHOST
+    string
+    default arm-linux
+
+config ARMEABI_ARCH
+    bool
+    default y
+
+config VFP_ARCH
+    bool
+    default n if PLATFORM = "imx27ads" 
+    default n if PLATFORM = "imx25_3stack"
+    default n if PLATFORM = "imx233"
+    default n if PLATFORM = "imx28"
+    default y
+
+# capabilities if different from defaults.lkc
+
+source ../../userspace/endian.lkc
+source ../../userspace/libc_type.lkc
+source ../../userspace/toolchain.lkc
+
+comment "Choose your bootloader for U-Boot"
+choice
+    prompt "bootloader"
+    default BOOTLOADER_NONE
+    help
+        This menu will let you choose the bootloader to use with your board.
+        If you don't want to build a bootloaders, select "Don't build..."
+
+    config BOOTLOADER_U_BOOT
+        bool "u-boot"
+    config BOOTLOADER_GIT
+        bool "u-boot-git"
+    config U_BOOT_DIR_BUILD
+        bool "u-boot local directory build"
+    config BOOTLOADER_NONE
+        bool "Don't build the bootloader"
+endchoice 
+
+choice
+    prompt "u-boot version"
+    default BOOTLOADER_U_BOOT_200908
+    depends on BOOTLOADER_U_BOOT
+    help
+        This menu will let you choose the version of u-boot to use with your board.
+
+    config BOOTLOADER_U_BOOT_200908
+        bool "u-boot v2009.08"
+    config BOOTLOADER_U_BOOT_201210
+        bool "u-boot v2012.10"
+endchoice
+
+comment "Choose your board for u-boot"
+choice
+    prompt "board"
+        default BOARD_MX51_BBG
+    depends on (PLATFORM = "imx51") && BOOTLOADER_U_BOOT_200908
+    help
+        This menu will let you choose the board you use.
+
+    config BOARD_MX51_BBG
+        bool "mx51_bbg"
+    config BOARD_MX51_3STACK
+        bool "mx51_3stack"
+    config BOARD_MX53_EVK
+        bool "mx53_evk"
+    config BOARD_MX53_ARD
+        bool "mx53_ard"
+    config BOARD_MX53_ARD_DDR3
+        bool "mx53_ard_ddr3"
+    config BOARD_MX53_SMD
+        bool "mx53_smd"
+    config BOARD_MX53_LOCO
+        bool "mx53_loco"
+    config BOARD_MX50_ARM2
+        bool "mx50_arm2"
+    config BOARD_MX50_ARM2_LPDDR2
+        bool "mx50_arm2_lpddr2"
+    config BOARD_MX50_ARM2_DDR2
+        bool "mx50_arm2_ddr2"
+    config BOARD_MX50_RDP
+        bool "mx50_rdp"
+    config BOARD_MX50_RD3
+        bool "mx50_rd3"
+endchoice
+
+choice
+    prompt "board"
+        default BOARD_MX6Q_ARM2
+    depends on PLATFORM = "imx6q" && BOOTLOADER_U_BOOT_200908
+    help
+        This menu will let you choose the board you use.
+
+    config BOARD_MX6Q_ARM2
+        bool "mx6q_arm2"
+    config BOARD_MX6Q_ARM2_LPDDR2
+        bool "mx6q_arm2_lpddr2"
+    config BOARD_MX6Q_ARM2_LPDDR2POP
+        bool "mx6q_arm2_lpddr2pop"
+    config BOARD_MX6Q_SABRELITE
+        bool "mx6q_sabrelite"
+    config BOARD_MX6Q_SABREAUTO
+        bool "mx6q_sabreauto"
+    config BOARD_MX6Q_SABREAUTO_NAND
+        bool "mx6q_sabreauto_nand"
+    config BOARD_MX6Q_SABREAUTO_WEIMNOR
+        bool "mx6q_sabreauto_weimnor"
+    config BOARD_MX6Q_SABREAUTO_SPI-NOR
+        bool "mx6q_sabreauto_spi-nor"
+    config BOARD_MX6Q_SABRESD
+        bool "mx6q_sabresd"
+    config BOARD_MX6Q_HDMIDONGLE
+        bool "mx6q_hdmidongle"
+    config BOARD_MX6Q_HDMIDONGLE_NAND
+        bool "mx6q_hdmidongle_nand"
+    config BOARD_MX6DL_ARM2
+        bool "mx6dl_arm2"
+    config BOARD_MX6DL_ARM2_LPDDR2
+        bool "mx6dl_arm2_lpddr2"
+    config BOARD_MX6DL_SABRESD
+        bool "mx6dl_sabresd"
+    config BOARD_MX6DL_SABREAUTO
+        bool "mx6dl_sabreauto"
+    config BOARD_MX6DL_SABREAUTO_NAND
+        bool "mx6dl_sabreauto_nand"
+    config BOARD_MX6DL_SABREAUTO_SPI-NOR
+        bool "mx6dl_sabreauto_spi-nor"
+    config BOARD_MX6DL_SABREAUTO_WEIMNOR
+        bool "mx6dl_sabreauto_weimnor"
+    config BOARD_MX6DL_HDMIDONGLE
+        bool "mx6dl_hdmidongle"
+    config BOARD_MX6DL_HDMIDONGLE_NAND
+        bool "mx6dl_hdmidongle_nand"
+    config BOARD_MX6SOLO_SABREAUTO
+        bool "mx6solo_sabreauto"
+    config BOARD_MX6SOLO_SABREAUTO_NAND
+        bool "mx6solo_sabreauto_nand"
+    config BOARD_MX6SOLO_SABREAUTO_WEIMNOR
+        bool "mx6solo_sabreauto_weimnor"
+    config BOARD_MX6SOLO_SABREAUTO_SPI-NOR
+        bool "mx6solo_sabreauto_spi-nor"
+    config BOARD_MX6SOLO_SABRESD
+        bool "mx6solo_sabresd"
+endchoice
+
+choice
+    prompt "board"
+        default BOARD_MX6SL_ARM2
+    depends on PLATFORM = "imx6s" && BOOTLOADER_U_BOOT_200908
+    help
+        This menu will let you choose the board you use.
+
+    config BOARD_MX6SL_ARM2
+        bool "mx6sl_arm2"
+    config BOARD_MX6SL_EVK
+        bool "mx6sl_evk"
+endchoice
+
+choice
+    prompt "board"
+        default BOARD_MX6QARM2
+    depends on PLATFORM = "imx6q" && BOOTLOADER_U_BOOT_201210
+    help
+        This menu will let you choose the board you use.
+
+    config BOARD_MX6QARM2
+        bool "mx6qarm2"
+    config BOARD_MX6QARM2_NAND
+        bool "mx6qarm2_nand"
+    config BOARD_MX6QARM2_LPDDR2
+        bool "mx6qarm2_lpddr2"
+    config BOARD_MX6QARM2_LPDDR2POP
+        bool "mx6qarm2_lpddr2pop"
+    config BOARD_MX6QSABREAUTO
+        bool "mx6qsabreauto"
+    config BOARD_MX6QSABREAUTO_NAND
+        bool "mx6qsabreauto_nand"
+    config BOARD_MX6QSABRELITE
+        bool "mx6qsabrelite"
+    config BOARD_MX6QSABRESD
+        bool "mx6qsabresd"
+    config BOARD_MX6DLARM2
+        bool "mx6dlarm2"
+    config BOARD_MX6DLARM2_LPDDR2
+        bool "mx6dlarm2_lpddr2"
+    config BOARD_MX6DLSABREAUTO
+        bool "mx6dlsabreauto"
+    config BOARD_MX6DLSABRESD
+        bool "mx6dlsabresd"
+endchoice
+
+choice
+    prompt "board"
+        default BOARD_MX6SLARM2
+    depends on PLATFORM = "imx6s" && BOOTLOADER_U_BOOT_201210
+    help
+        This menu will let you choose the board you use.
+
+    config BOARD_MX6SLARM2
+        bool "mx6slarm2"
+    config BOARD_MX6SLEVK
+        bool "mx6slevk"
+endchoice
+
+source ../../userspace/u-boot-dir-build.lkc
+    
+config PKG_U_BOOT
+    string
+    default "u-boot" if ( BOOTLOADER_U_BOOT && !BOOTLOADER_U_BOOT_200908 && !BOOTLOADER_U_BOOT_201210 )
+    default "u-boot-v2009.08" if BOOTLOADER_U_BOOT_200908
+    default "u-boot-v2012.10" if BOOTLOADER_U_BOOT_201210
+    default "u-boot-git" if BOOTLOADER_GIT
+    default "u-boot-dir-build" if U_BOOT_DIR_BUILD
+    default "" if BOOTLOADER_NONE
+
+config PKG_U_BOOT_CONFIG_TYPE
+    depends on PKG_KERNEL_UPDATER && BOOTLOADER_U_BOOT_200908
+    default "mx25_3stack_mfg_config" if ( PLATFORM = "imx25_3stack" )
+    default "mx35_3stack_mfg_config" if (PLATFORM = "imx35_3stack" )
+    default "mx51_bbg_mfg_config" if( PLATFORM = "imx51" && BOARD_MX51_BBG )
+    default "mx53_evk_mfg_config" if( PLATFORM = "imx51" && BOARD_MX53_EVK )
+    default "mx53_ard_mfg_config" if ( PLATFORM = "imx51" && BOARD_MX53_ARD )
+    default "mx53_ard_ddr3_mfg_config" if ( PLATFORM = "imx51" && BOARD_MX53_ARD_DDR3 )
+    default "mx53_smd_mfg_config" if ( PLATFORM = "imx51" && BOARD_MX53_SMD )
+    default "mx53_loco_mfg_config" if ( PLATFORM = "imx51" && BOARD_MX53_LOCO )
+    default "mx50_arm2_mfg_config" if( PLATFORM = "imx51" && BOARD_MX50_ARM2 )
+    default "mx50_rdp_mfg_config" if( PLATFORM = "imx51" && BOARD_MX50_RDP )
+    default "mx50_rd3_mfg_config" if( PLATFORM = "imx51" && BOARD_MX50_RD3 )
+    default "mx6q_arm2_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_ARM2 )
+    default "mx6q_sabrelite_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABRELITE )
+    default "mx6q_sabreauto_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO )
+    default "mx6q_sabreauto_spi-nor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_SPI-NOR )
+    default "mx6q_sabreauto_weimnor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_WEIMNOR )
+    default "mx6q_sabreauto_nand_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_NAND )
+    default "mx6q_sabresd_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABRESD )
+    default "mx6q_hdmidongle_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_HDMIDONGLE )
+    default "mx6q_hdmidongle_nand_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_HDMIDONGLE_NAND )
+    default "mx6solo_sabreauto_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO )
+    default "mx6solo_sabreauto_nand_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_NAND )
+    default "mx6solo_sabreauto_spi-nor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_SPI-NOR )
+    default "mx6solo_sabreauto_weimnor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_WEIMNOR )
+    default "mx6solo_sabresd_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABRESD )
+    default "mx6dl_arm2_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_ARM2 )
+    default "mx6dl_sabresd_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABRESD )
+    default "mx6dl_sabreauto_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO )
+    default "mx6dl_sabreauto_nand_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_NAND )
+    default "mx6dl_sabreauto_spi-nor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_SPI-NOR )
+    default "mx6dl_sabreauto_weimnor_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_WEIMNOR )
+    default "mx6dl_hdmidongle_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_HDMIDONGLE )
+    default "mx6dl_hdmidongle_nand_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_HDMIDONGLE_NAND )
+    default "mx6sl_arm2_mfg_config" if (PLATFORM = "imx6s" && BOARD_MX6SL_ARM2 )
+    default "mx6sl_evk_mfg_config" if (PLATFORM = "imx6s" && BOARD_MX6SL_EVK )
+
+ config PKG_U_BOOT_CONFIG_TYPE
+    depends on PKG_KERNEL_UPDATER && BOOTLOADER_U_BOOT_201210
+    string
+    default "mx6qsabresd_mfg_config" if (PLATFORM = "imx6q" && BOARD_MX6QSABRESD )
+    
+config PKG_U_BOOT_CONFIG_TYPE
+    depends on !PKG_KERNEL_UPDATER && BOOTLOADER_U_BOOT_200908
+    string
+    default "mx25_3stack_config" if ( PLATFORM = "imx25_3stack" )
+    default "mx23_evk_config" if PLATFORM = "imx233"
+    default "mx28_evk_config" if PLATFORM= "imx28"
+    default "mx31ads_config" if PLATFORM = "imx31ads"
+    default "mx31_3stack_config" if PLATFORM = "imx31_3stack"
+    default "mx35_3stack_config" if (PLATFORM = "imx35_3stack" )
+    default "mx37_3stack_config" if PLATFORM = "imx37_3stack"
+    default "mx51_3stack_config" if PLATFORM = "imx51_3stack"
+    default "mx51_3stack_config" if ( PLATFORM = "imx51" && BOARD_MX51_3STACK )
+    default "mx51_bbg_config"	 if ( PLATFORM = "imx51" && BOARD_MX51_BBG )
+    default "mx53_evk_config" if ( PLATFORM = "imx51" && BOARD_MX53_EVK )
+    default "mx53_ard_config" if ( PLATFORM = "imx51" && BOARD_MX53_ARD )
+    default "mx53_ard_ddr3_config" if ( PLATFORM = "imx51" && BOARD_MX53_ARD_DDR3 )
+    default "mx53_smd_config" if ( PLATFORM = "imx51" && BOARD_MX53_SMD )
+    default "mx53_loco_config" if ( PLATFORM = "imx51" && BOARD_MX53_LOCO )
+    default "mx50_arm2_config" if( PLATFORM = "imx51" && BOARD_MX50_ARM2 )
+    default "mx50_arm2_lpddr2_config" if( PLATFORM = "imx51" && BOARD_MX50_ARM2_LPDDR2 )
+    default "mx50_arm2_ddr2_config" if( PLATFORM = "imx51" && BOARD_MX50_ARM2_DDR2 )
+    default "mx50_rdp_config" if( PLATFORM = "imx51" && BOARD_MX50_RDP )
+    default "mx50_rd3_config" if( PLATFORM = "imx51" && BOARD_MX50_RD3 )
+    default "mx6q_arm2_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_ARM2 )
+    default "mx6q_sabrelite_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABRELITE )
+    default "mx6q_sabreauto_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO )
+    default "mx6q_sabreauto_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_NAND )
+    default "mx6q_sabreauto_weimnor_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_WEIMNOR )
+    default "mx6q_sabreauto_spi-nor_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABREAUTO_SPI-NOR )
+    default "mx6q_sabresd_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_SABRESD )
+    default "mx6q_hdmidongle_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_HDMIDONGLE )
+    default "mx6q_hdmidongle_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_HDMIDONGLE_NAND )
+    default "mx6solo_sabreauto_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO )
+    default "mx6solo_sabreauto_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_NAND )
+    default "mx6solo_sabreauto_spi-nor_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_SPI-NOR )
+    default "mx6solo_sabreauto_weimnor_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABREAUTO_WEIMNOR )
+    default "mx6solo_sabresd_config" if (PLATFORM = "imx6q" && BOARD_MX6SOLO_SABRESD )
+    default "mx6q_arm2_lpddr2_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_ARM2_LPDDR2 )
+    default "mx6q_arm2_lpddr2pop_config" if (PLATFORM = "imx6q" && BOARD_MX6Q_ARM2_LPDDR2POP )
+    default "mx6dl_arm2_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_ARM2 )
+    default "mx6dl_arm2_lpddr2_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_ARM2_LPDDR2 )
+    default "mx6dl_sabresd_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABRESD )
+    default "mx6dl_sabreauto_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO )
+    default "mx6dl_sabreauto_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_NAND )
+    default "mx6dl_sabreauto_spi-nor_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_SPI-NOR )
+    default "mx6dl_sabreauto_weimnor_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_SABREAUTO_WEIMNOR )
+    default "mx6dl_hdmidongle_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_HDMIDONGLE )
+    default "mx6dl_hdmidongle_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6DL_HDMIDONGLE_NAND )
+    default "mx6sl_arm2_config" if (PLATFORM = "imx6s" && BOARD_MX6SL_ARM2 )
+    default "mx6sl_evk_config" if (PLATFORM = "imx6s" && BOARD_MX6SL_EVK )
+
+ config PKG_U_BOOT_CONFIG_TYPE
+    depends on !PKG_KERNEL_UPDATER && BOOTLOADER_U_BOOT_201210
+    string
+    default "mx6qarm2_config" if (PLATFORM = "imx6q" && BOARD_MX6QARM2 )
+    default "mx6qarm2_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6QARM2_NAND )
+    default "mx6qarm2_lpddr2_config" if (PLATFORM = "imx6q" && BOARD_MX6QARM2_LPDDR2 )
+    default "mx6qarm2_lpddr2pop_config" if (PLATFORM = "imx6q" && BOARD_MX6QARM2_LPDDR2POP )
+    default "mx6qsabreauto_config" if (PLATFORM = "imx6q" && BOARD_MX6QSABREAUTO )
+    default "mx6qsabreauto_nand_config" if (PLATFORM = "imx6q" && BOARD_MX6QSABREAUTO_NAND )
+    default "mx6qsabrelite_config" if (PLATFORM = "imx6q" && BOARD_MX6QSABRELITE )
+    default "mx6qsabresd_config" if (PLATFORM = "imx6q" && BOARD_MX6QSABRESD )
+    default "mx6dlarm2_config" if (PLATFORM = "imx6q" && BOARD_MX6DLARM2 )
+    default "mx6dlarm2_lpddr2_config" if (PLATFORM = "imx6q" && BOARD_MX6DLARM2_LPDDR2 )
+    default "mx6dlsabreauto_config" if (PLATFORM = "imx6q" && BOARD_MX6DLSABREAUTO )
+    default "mx6dlsabresd_config" if (PLATFORM = "imx6q" && BOARD_MX6DLSABRESD )
+    default "mx6slarm2_config" if (PLATFORM = "imx6s" && BOARD_MX6SLARM2 )
+    default "mx6slevk_config" if (PLATFORM = "imx6s" && BOARD_MX6SLEVK )
+ 
+config PKG_U_BOOT_BUILD_ARGS
+    string
+    default "OPTFLAGS=-Os" if !PKG_U_BOOT_CW
+
+config SYSCFG_KTARG
+    string
+    default "uImage"
+
+config SYSCFG_BOOT_KERNEL
+    string
+    default "arch/arm/boot/uImage arch/arm/boot/zImage"
+
+comment "Choose your Kernel"
+choice
+    prompt "kernel"
+    default KERNEL_35
+    help
+        This menu will let you choose the kernel to use with your board.
+        If you don't want to build a kernel, unselect this option.
+
+    config KERNEL_3507
+        bool "Linux 3.5.7-imx"
+        help
+            This is the 3.5.7 kernel and patches for MXC and i.MX platforms.
+
+    config KERNEL_3035
+        bool "Linux 3.0.35-imx"
+        help
+            This is the 3.0.35 kernel and patches for MXC and i.MX platforms.
+
+    config KERNEL_3015
+        bool "Linux 3.0.15-imx"
+        help
+            This is the 3.0.15 kernel and patches for MXC and i.MX platforms.
+
+    config KERNEL_38
+        bool "Linux 2.6.38-imx"
+        help
+            This is the 2.6.38 kernel and patches for MXC and i.MX platforms.
+
+    config KERNEL_35
+        bool "Linux 2.6.35-imx"
+        help
+            This is the 2.6.35 kernel and patches for MXC and i.MX platforms.
+
+    config KERNEL_31
+        bool "Linux 2.6.31-imx"
+        help
+            This is the 2.6.31 kernel and patches for MXC and i.MX platforms.
+    config KERNEL_28
+        bool "Linux 2.6.28-imx"
+        help
+            This is the 2.6.28 kernel and patches for MXC and i.MX platforms.
+    config KERNEL_GIT
+        bool "linux-2.6-imx.git"
+        help
+            Build using a git clone of the kernel sources
+    config KERNEL_DIR_BUILD
+        bool "Local Linux directory build"
+        help
+            Build using a local copy of the kernel sources
+    config KERNEL_NONE
+        bool "Dont build the Linux kernel"
+        help
+            Select this if you dont want to build the kernel
+endchoice
+
+source ../../userspace/kernel_dir_build.lkc
+
+config PKG_KERNEL
+    string
+    default "kernel-3.5.7"          if KERNEL_3507
+    default "kernel-3.0.35"         if KERNEL_3035
+    default "kernel-3.0.15"         if KERNEL_3015
+    default "kernel-2.6.38"         if KERNEL_38
+    default "kernel-2.6.35"         if KERNEL_35
+    default "kernel-2.6.31"         if KERNEL_31
+    default "kernel-2.6.28"         if KERNEL_28
+    default "kernel-git"            if KERNEL_GIT
+    default "kernel26-dir-build"    if KERNEL_DIR_BUILD
+
+config PKG_KERNEL_WANT_HEADERS
+    depends ! KERNEL_NONE
+    bool "Include kernel headers"
+    help
+        Selecting this will copy kernel headers to rootfs/usr/src/linux/include
+
+config PKG_KERNEL_WANT_CF
+    depends ! KERNEL_NONE
+    bool "Configure the kernel"
+    default n
+
+config PKG_KERNEL_LEAVESRC
+    depends ! KERNEL_NONE
+    bool "Leave the sources after building"
+    default n
+    help
+        This option leaves the build source tree in rpm/BUILD in place
+
+config PKG_KERNEL_UPDATER
+    bool "Build mfg firmware"
+    default n
+
+config PKG_KERNEL_PRECONFIG
+    depends on (PKG_KERNEL_UPDATER && !KERNEL_3507)
+    string
+    default "imx25_updater_defconfig" if (PLATFORM = "imx25_3stack")
+    default "imx23evk_updater_defconfig" if (PLATFORM = "imx233")
+    default "imx28evk_updater_defconfig" if (PLATFORM = "imx28")
+    default "mx3_updater_defconfig" if (PLATFORM = "imx35_3stack")
+    default "imx5_updater_defconfig" if (PLATFORM = "imx51")
+    default "imx6_updater_defconfig" if (PLATFORM = "imx6q")
+    default "imx6s_updater_defconfig" if (PLATFORM = "imx6s")
+    default "linux-kernel-dir-build.config" if KERNEL_DIR_BUILD
+
+config PKG_KERNEL_PRECONFIG
+    depends on (!PKG_KERNEL_UPDATER && !KERNEL_3507)
+    string
+    default "imx27ads_defconfig" if PLATFORM = "imx27ads" 
+    default "imx31ads_defconfig" if PLATFORM = "imx31ads" 
+    default "imx25_3stack_defconfig" if (PLATFORM = "imx25_3stack")
+    default "imx23evk_defconfig" if (PLATFORM = "imx233")
+    default "imx28evk_defconfig" if (PLATFORM = "imx28")
+    default "mx3_defconfig" if PLATFORM = "imx31_3stack"
+    default "mx3_defconfig" if (PLATFORM = "imx35_3stack")
+    default "imx37_3stack_defconfig" if PLATFORM = "imx37_3stack" 
+    default "imx51_3stack_defconfig" if PLATFORM = "imx51_3stack" 
+    default "imx5_defconfig" if (PLATFORM = "imx51")
+    default "imx6_defconfig" if (PLATFORM = "imx6q")
+    default "imx6s_defconfig" if (PLATFORM = "imx6s")
+    default "linux-kernel-dir-build.config" if KERNEL_DIR_BUILD
+
+config PKG_KERNEL_PRECONFIG
+depends on (!PKG_KERNEL_UPDATER && KERNEL_3507)
+string
+    default "imx_v4_v5_defconfig" if (PLATFORM = "imx27ads" || PLATFORM = "imx31ads" || PLATFORM = "imx25_3stack" || PLATFORM = "imx233" || PLATFORM = "imx28")
+    default "imx_v6_v7_defconfig" if (PLATFORM = "imx51_3stack" || PLATFORM = "imx51" || PLATFORM = "imx6q" || PLATFORM = "imx6s")
+    default "linux-kernel-dir-build.config" if KERNEL_DIR_BUILD
+
+config PKG_KERNEL_PRECONFIG
+depends on (PKG_KERNEL_UPDATER && KERNEL_3507)
+string
+    default "imx_v4_v5_updater_defconfig" if (PLATFORM = "imx27ads" || PLATFORM = "imx31ads" || PLATFORM = "imx25_3stack" || PLATFORM = "imx233" || PLATFORM = "imx28")
+    default "imx_v6_v7_updater_defconfig" if (PLATFORM = "imx51_3stack" || PLATFORM = "imx51" || PLATFORM = "imx6q" || PLATFORM = "imx6s")
+    default "linux-kernel-dir-build.config" if KERNEL_DIR_BUILD
+
+source ../../userspace/distro.lkc
+source ../../userspace/packages.lkc
+source ../../userspace/sysconfig.lkc
+source ../../userspace/deployment.lkc
+source ../../userspace/defaults.lkc

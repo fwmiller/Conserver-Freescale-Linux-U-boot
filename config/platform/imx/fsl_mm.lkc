@@ -1,0 +1,63 @@
+menu "Freescale Multimedia Plugins/Codecs"
+
+config PKG_LIBFSLCODEC
+    bool "libfslcodec"
+    help
+         This package provides the Freescale Multimedia standard codec.
+
+config PKG_LIBFSLPARSER
+    bool "libfslparser"
+    help
+         This package provides the Freescale Multimedia standard parser.
+
+config PKG_LIBFSLVPUWRAP
+    select PKG_IMX_LIB
+    bool "libfslvpuwrap"
+    help
+         This package provides the Freescale Multimedia VPU-Wrapper Library based on vpulib.
+
+config PKG_LIBFSLAACPCODEC
+    bool "libfslaacpcodec"
+    help
+         This package provides the Freescale extra codec for AAC plus.
+
+config PKG_LIBFSLAC3CODEC
+    bool "libfslac3codec"
+    help
+         This package provides the Freescale extra codec for AC3.
+
+config PKG_LIBFSLMSCODEC
+    bool "libfslmscodec"
+    help
+         This package provides the Freescale Multimedia extra codec for Microsoft Windows Media.
+
+config PKG_LIBFSLMSPARSER
+    bool "libfslmsparser"
+    help
+         This package provides the Freescale Multimedia extra parser for Microsoft Windows Media.
+
+
+config PKG_GST_FSL_PLUGINS
+    select PKG_GSTREAMER_CORE
+    select PKG_GST_PLUGINS_BASE
+    select PKG_ZLIB
+    select PKG_LIBFSLCODEC
+    select PKG_LIBFSLPARSER
+    bool "gst-fsl-plugins"
+    help
+         This package provides the Freescale Gstreamer based plugins.
+
+config PKG_GST_PLUGINS_GL
+    select PKG_GST_FSL_PLUGINS
+    bool "gst-plugins-gl"
+    help
+         This package provides the Freescale Gstreamer based plugins on OpenGl.
+
+config PKG_FSL_ALSA_PLUGINS
+    select PKG_ALSA_LIB
+    bool "fsl-alsa-plugins"
+    help
+         This package provides the Freescale alsa plugins.
+
+
+endmenu

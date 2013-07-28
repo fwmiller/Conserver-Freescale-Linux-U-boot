@@ -1,0 +1,3 @@
+PKG_MTD_UTILS = mtd-utils
+PKG_ELFTOSB = elftosb
+PKG_UBUNTU_ARM_LIB = ubuntu_arm_lib
