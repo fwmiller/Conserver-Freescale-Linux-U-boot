@@ -66,7 +66,8 @@
  * Hardware drivers
  */
 #define CONFIG_MXC_UART
-#define CONFIG_UART_BASE_ADDR   UART1_BASE_ADDR
+//#define CONFIG_UART_BASE_ADDR   UART1_BASE_ADDR
+#define CONFIG_UART_BASE_ADDR   UART5_BASE_ADDR
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
@@ -103,7 +104,7 @@
 #define CONFIG_CMD_CLOCK
 #define CONFIG_REF_CLK_FREQ CONFIG_MX6_HCLK_FREQ
 
-/* #define CONFIG_CMD_SATA */
+#define CONFIG_CMD_SATA
 #undef CONFIG_CMD_IMLS
 
 #define CONFIG_CMD_IMX_DOWNLOAD_MODE
@@ -115,6 +116,7 @@
 #define CONFIG_LOADADDR		0x10800000	/* loadaddr env var */
 #define CONFIG_RD_LOADADDR	(0x1300000)
 
+/*
 #define	CONFIG_EXTRA_ENV_SETTINGS					\
 		"netdev=eth0\0"						\
 		"ethprime=FEC0\0"					\
@@ -132,6 +134,16 @@
 		"mmc dev 3; "	\
 		"mmc read ${loadaddr} 0x800 0x2000; bootm\0"	\
 		"bootcmd=run bootcmd_net\0"                             \
+*/
+
+
+#define CONFIG_EXTRA_ENV_SETTINGS                                       \
+                "netdev=eth0\0"                                         \
+                "ethprime=FEC0\0"                                       \
+                "uboot=u-boot.bin\0"                                    \
+                "kernel=uImage\0"                                       \
+                "bootargs=console=ttymxc0,115200 root=/dev/sda1 video=mxcfb0:dev=hdmi,1280x1080@60,if=RGB24\0"                                          \
+                "bootcmd=mmc dev 2;mmc read 0x10800000 0x800 0x2000;bootm\0" \
 
 
 #define CONFIG_ARP_TIMEOUT	200UL
@@ -287,9 +299,20 @@
 /*-----------------------------------------------------------------------
  * Physical Memory Map
  */
-#define CONFIG_NR_DRAM_BANKS	1
-#define PHYS_SDRAM_1		CSD0_DDR_BASE_ADDR
-#define PHYS_SDRAM_1_SIZE	(1u * 1024 * 1024 * 1024)
+//#define CONFIG_NR_DRAM_BANKS	1
+#define CONFIG_NR_DRAM_BANKS	2
+
+//#define PHYS_SDRAM_1		CSD0_DDR_BASE_ADDR
+#define PHYS_SDRAM_1		0x10000000
+
+//#define PHYS_SDRAM_1_SIZE	(1u * 1024 * 1024 * 1024)
+#define PHYS_SDRAM_1_SIZE	(8u * 0x10000000)
+
+// <added>
+#define PHYS_SDRAM_2		0x80000000
+#define PHYS_SDRAM_2_SIZE	((8u * 0x10000000) - 4)
+// </added>
+
 #define iomem_valid_addr(addr, size) \
 	(addr >= PHYS_SDRAM_1 && addr <= (PHYS_SDRAM_1 + PHYS_SDRAM_1_SIZE))
 

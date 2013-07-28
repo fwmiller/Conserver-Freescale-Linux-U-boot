@@ -361,6 +361,10 @@ int dram_init(void)
 
 	gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
 	gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+// <added>
+	gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+	gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+// </added>
 
 	return 0;
 }
@@ -368,11 +372,16 @@ int dram_init(void)
 static void setup_uart(void)
 {
 #if defined CONFIG_MX6Q
-	/* UART1 TXD */
-	mxc_iomux_v3_setup_pad(MX6Q_PAD_CSI0_DAT10__UART1_TXD);
+//	/* UART1 TXD */
+//	mxc_iomux_v3_setup_pad(MX6Q_PAD_CSI0_DAT10__UART1_TXD);
+	/* UART5 TXD */
+	mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_COL1__UART5_TXD);
 
-	/* UART1 RXD */
-	mxc_iomux_v3_setup_pad(MX6Q_PAD_CSI0_DAT11__UART1_RXD);
+//	/* UART1 RXD */
+//	mxc_iomux_v3_setup_pad(MX6Q_PAD_CSI0_DAT11__UART1_RXD);
+	/* UART5 RXD */
+	mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_ROW1__UART5_RXD);
+
 #elif defined CONFIG_MX6DL
 	/* UART1 TXD */
 	mxc_iomux_v3_setup_pad(MX6DL_PAD_CSI0_DAT10__UART1_TXD);
@@ -787,6 +796,17 @@ static int setup_pmic_voltages(void)
 			printf("Set VGEN5 error!\n");
 			return -1;
 		}
+/*
+// <added>
+		// Decrease DDR3 voltage from 1.5VDC to 1.35VDC
+		value = 0x26;
+		if (i2c_write(0x8, 0x3c, 1, &value, 1)) {
+			printf("Set 1.35VDC DDR3 voltage error!\n");
+			return -1;
+		} else
+			printf("Set DDR3 voltage to 1.35VDC\n");
+// </added>
+*/
 	}
 }
 #endif
@@ -833,15 +853,15 @@ void spi_io_init(struct imx_spi_dev_t *dev)
 
 #if defined CONFIG_MX6Q
 		/* SCLK */
-		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_COL0__ECSPI1_SCLK);
+//		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_COL0__ECSPI1_SCLK);
 
 		/* MISO */
-		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_COL1__ECSPI1_MISO);
+//		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_COL1__ECSPI1_MISO);
 
 		/* MOSI */
-		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_ROW0__ECSPI1_MOSI);
+//		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_ROW0__ECSPI1_MOSI);
 
-		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_ROW1__ECSPI1_SS0);
+//		mxc_iomux_v3_setup_pad(MX6Q_PAD_KEY_ROW1__ECSPI1_SS0);
 #elif defined CONFIG_MX6DL
 		/* SCLK */
 		mxc_iomux_v3_setup_pad(MX6DL_PAD_KEY_COL0__ECSPI1_SCLK);
@@ -966,10 +986,10 @@ iomux_v3_cfg_t usdhc3_pads[] = {
 	MX6Q_PAD_SD3_DAT1__USDHC3_DAT1,
 	MX6Q_PAD_SD3_DAT2__USDHC3_DAT2,
 	MX6Q_PAD_SD3_DAT3__USDHC3_DAT3,
-	MX6Q_PAD_SD3_DAT4__USDHC3_DAT4,
-	MX6Q_PAD_SD3_DAT5__USDHC3_DAT5,
-	MX6Q_PAD_SD3_DAT6__USDHC3_DAT6,
-	MX6Q_PAD_SD3_DAT7__USDHC3_DAT7,
+//	MX6Q_PAD_SD3_DAT4__USDHC3_DAT4,
+//	MX6Q_PAD_SD3_DAT5__USDHC3_DAT5,
+//	MX6Q_PAD_SD3_DAT6__USDHC3_DAT6,
+//	MX6Q_PAD_SD3_DAT7__USDHC3_DAT7,
 };
 
 iomux_v3_cfg_t usdhc4_pads[] = {
@@ -1808,6 +1828,15 @@ static int phy_write(char *devname, unsigned char addr, unsigned char reg,
 
 int mx6_rgmii_rework(char *devname, int phy_addr)
 {
+	// Added Micrel KSZ9031 support
+
+	/* introduce tx clock delay for Cornfed Efficens board */
+	phy_write(devname, phy_addr, 0xd, 0x2);
+	phy_write(devname, phy_addr, 0xe, 0x8);
+	phy_write(devname, phy_addr, 0xd, 0x4002);
+	phy_write(devname, phy_addr, 0xe, 0x03ef);
+
+#if 0
 	unsigned short val;
 
 	/* To enable AR8031 ouput a 125MHz clk from CLK_25M */
@@ -1825,7 +1854,7 @@ int mx6_rgmii_rework(char *devname, int phy_addr)
 	phy_read(devname, phy_addr, 0x1e, &val);
 	val |= 0x0100;
 	phy_write(devname, phy_addr, 0x1e, val);
-
+#endif
 	return 0;
 }
 
