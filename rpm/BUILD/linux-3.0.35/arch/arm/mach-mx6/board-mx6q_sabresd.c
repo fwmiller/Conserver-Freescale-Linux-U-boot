@@ -252,7 +252,7 @@ static const struct anatop_thermal_platform_data
 
 static inline void mx6q_sabresd_init_uart(void)
 {
-	imx6q_add_imx_uart(2, NULL);
+//	imx6q_add_imx_uart(2, NULL);
 	imx6q_add_imx_uart(0, NULL);
 }
 
@@ -1952,8 +1952,10 @@ static void __init mx6_sabresd_timer_init(void)
 #endif
 	mx6_clocks_init(32768, 24000000, 0, 0);
 
-	uart_clk = clk_get_sys("imx-uart.0", NULL);
-	early_console_setup(UART1_BASE_ADDR, uart_clk);
+//	uart_clk = clk_get_sys("imx-uart.0", NULL);
+//	early_console_setup(UART1_BASE_ADDR, uart_clk);
+	uart_clk = clk_get_sys("imx-uart.4", NULL);
+	early_console_setup(UART5_BASE_ADDR, uart_clk);
 }
 
 static struct sys_timer mx6_sabresd_timer = {
