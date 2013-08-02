@@ -273,8 +273,10 @@ MXC_DCD_ITEM(83, MMDC_P0_BASE_ADDR + 0x01c, 0x00000000)
 #else  /* i.MX6Q */
 //dcd_hdr:          .word 0x40a002D2 /* Tag=0xD2, Len=83*8 + 4 + 4, Ver=0x40 */
 //write_dcd_cmd:    .word 0x049c02CC /* Tag=0xCC, Len=83*8 + 4, Param=0x04 */
-dcd_hdr:          .word 0x40c802d2 /* Tag=0xD2, Len=88*8 + 4 + 4, Ver=0x40 */
-write_dcd_cmd:    .word 0x04c402cc /* Tag=0xCC, Len=88*8 + 4, Param=0x04 */
+//dcd_hdr:          .word 0x40c802d2 /* Tag=0xD2, Len=88*8 + 4 + 4, Ver=0x40 */
+//write_dcd_cmd:    .word 0x04c402cc /* Tag=0xCC, Len=88*8 + 4, Param=0x04 */
+dcd_hdr:          .word 0x40d002d2 /* Tag=0xD2, Len=89*8 + 4 + 4, Ver=0x40 */
+write_dcd_cmd:    .word 0x04cc02cc /* Tag=0xCC, Len=89*8 + 4, Param=0x04 */
 
 /* DCD */
 
@@ -411,6 +413,9 @@ MXC_DCD_ITEM(85, MMDC_P1_BASE_ADDR + 0x818, 0x00011117)
 MXC_DCD_ITEM(86, MMDC_P0_BASE_ADDR + 0x004, 0x00025576)
 MXC_DCD_ITEM(87, MMDC_P0_BASE_ADDR + 0x404, 0x00011006)
 MXC_DCD_ITEM(88, MMDC_P0_BASE_ADDR + 0x01c, 0x00000000)
+
+// Adjust MMDC tRFC and tXS DDR3 refresh timing
+MXC_DCD_ITEM(89, 0x021b000c, 0xffff7975)
 
 #endif
 

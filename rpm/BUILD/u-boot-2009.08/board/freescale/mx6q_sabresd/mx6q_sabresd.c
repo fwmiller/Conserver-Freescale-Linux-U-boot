@@ -796,7 +796,6 @@ static int setup_pmic_voltages(void)
 			printf("Set VGEN5 error!\n");
 			return -1;
 		}
-/*
 // <added>
 		// Decrease DDR3 voltage from 1.5VDC to 1.35VDC
 		value = 0x26;
@@ -806,7 +805,6 @@ static int setup_pmic_voltages(void)
 		} else
 			printf("Set DDR3 voltage to 1.35VDC\n");
 // </added>
-*/
 	}
 }
 #endif
